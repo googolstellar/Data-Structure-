@@ -27,7 +27,7 @@ void insertNode(node **pstart, int val, int pos){
     }
     else{
         t = *pstart;
-        while(pos--){
+        while(--pos){
             t = t->next;
         }
         temp->next = t->next;
@@ -40,11 +40,26 @@ void insertNode(node **pstart, int val, int pos){
 int deleteNode(node **pstart, int pos){
     node *temp = NULL, *t = NULL;
     if(pos == 0){
-        temp = *pstart;
-        *pstart = (*pstart)->next;
+        if(*pstart != NULL) {
+            temp = *pstart;
+            *pstart = (*pstart)->next;
+        }
+        else{
+            printf("No more nodes to delete! ");
+            return END;
+        }
     }
     else if(pos == END) {
         t = *pstart;
+        if(t == NULL) {
+            printf("No more nodes to delete! ");
+            return END;
+        }
+        if(t->next == NULL) {
+            temp = t;
+            *pstart = NULL; 
+            return temp->data;
+        }
         while(t->next->next != NULL){
             t = t->next;
         }
@@ -53,8 +68,16 @@ int deleteNode(node **pstart, int pos){
     }
     else {
         t = *pstart;
-        while(pos--){
+        if(t == NULL){
+            printf("No more nodes to delete! ");
+            return END;
+        }
+        while(--pos && t->next != NULL){
             t= t->next;
+        }
+        if(t->next == NULL){
+            printf("Not Valid input! ");
+            return END;
         }
         temp = t->next;
         t->next = t->next->next;
@@ -64,6 +87,9 @@ int deleteNode(node **pstart, int pos){
 
 void display(node **pstart) {
     node *t = *pstart;
+    if(t == NULL) {
+        printf("No more nodes to delete!\n");
+    }
     while(t != NULL){
         printf("%d ", t->data);
         t = t->next;
@@ -74,6 +100,7 @@ int main () {
     node *start = NULL;
     int choice, choice2, data, pos = 0;
     do{
+        system("clear");
         printf("Linked list operations:\n");
         printf("1. Insert a node\n");
         printf("2. Delete a node\n");
@@ -84,7 +111,7 @@ int main () {
         switch(choice) {
             case 1:
                    do{
-                       //clear screen
+                       system("clear");
                        printf("1. Insert at begining\n");
                        printf("2. Insert at end\n");
                        printf("3. Insert in between\n");
@@ -97,7 +124,6 @@ int main () {
                                   printf("Enter the number to be inserted: ");
                                   scanf("%d", &data); 
                                   insertNode(&start, data, pos);
-                                  printf("Start value: %d\n", start->data);
                                   break;
                            case 2:
                                   pos = END;
@@ -123,7 +149,7 @@ int main () {
                    break; 
             case 2:
                    do{
-                       //clear screen
+                       system("clear");
                        printf("1. Delete from begining\n");
                        printf("2. Delete from end\n");
                        printf("3. Delete from between\n");
@@ -134,18 +160,30 @@ int main () {
                            case 1:
                                   pos = 0;    
                                   data = deleteNode(&start, pos);
-                                  printf("Deleted value is: %d\n", data);
+                                  if(data != END){
+                                      printf("Deleted value is: %d\n", data);
+                                  }
+                                  getchar();
+                                  getchar();
                                   break;
                            case 2:
                                   pos = END;
-                                  data = deleteNode(&start, pos);
-                                  printf("Deleted value is: %d\n", data);
+                                  data = deleteNode(&start, pos);                     
+                                  if(data != END){
+                                      printf("Deleted value is: %d\n", data);
+                                  }
+                                  getchar();
+                                  getchar();
                                   break;
                             case 3:
                                    printf("Enter the number of elements after which You wanna delete: ");
                                    scanf("%d", &pos);
                                    data = deleteNode(&start, pos);
-                                   printf("Deleted value is: %d\n", data);
+                                   if(data != END){
+                                      printf("Deleted value is: %d\n", data);
+                                   }
+                                   getchar();
+                                   getchar();
                                    break;
                             case 4: break;
                             default: 
@@ -155,7 +193,10 @@ int main () {
                    } 
                    while(choice2 <= 3);
                    break; 
-            case 3: display(&start);
+            case 3: 
+                    display(&start);
+                    getchar();
+                    getchar();
                     break;
             case 4: break;
             default: printf("Invalid choice! ");
